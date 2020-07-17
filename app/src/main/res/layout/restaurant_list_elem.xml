@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cons_restaurant_item"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="@dimen/marginSide"
+    android:layout_marginEnd="@dimen/marginSide"
+    android:layout_marginBottom="@dimen/marginVertical"
+    app:cardCornerRadius="@dimen/cornerRadiusHigh"
+    app:cardBackgroundColor="@color/yellow"
+    app:cardElevation="5dp"
+    android:clipChildren="true"
+    >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="50dp"
+                    app:cardBackgroundColor="@color/black"
+                    app:cardCornerRadius="@dimen/cornerRadiusHigh"
+                    app:cardElevation="0dp"
+                    android:clipChildren="true"
+                    >
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/img_item_photo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            />
+
+                </androidx.cardview.widget.CardView>
+
+                <com.bite.bite.views.ExtraTextView
+                    android:id="@+id/tv_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:paddingStart="@dimen/cornerRadiusHigh"
+                    android:paddingEnd="@dimen/cornerRadiusHigh"
+                    android:textSize="22sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

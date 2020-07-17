@@ -1,0 +1,2 @@
+rootProject.name='Bite'
+include ':app'

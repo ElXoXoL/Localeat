@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="@dimen/marginVertical"
+    android:background="@drawable/sales_item_bg"
+    android:elevation="5dp"
+    >
+
+    <com.joooonho.SelectableRoundedImageView
+        android:id="@+id/img_sales_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:scaleType="centerCrop"
+        app:sriv_left_top_corner_radius="@dimen/cornersSale"
+        app:sriv_right_top_corner_radius="@dimen/cornersSale"
+        app:sriv_right_bottom_corner_radius="@dimen/cornersSale"
+        app:sriv_left_bottom_corner_radius="@dimen/cornersSale"
+        />
+
+    <com.bite.bite.views.ExtraTextView
+        android:id="@+id/tv_sales_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Pesto Cafe"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@id/img_sales_photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

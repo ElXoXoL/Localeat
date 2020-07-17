@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bite.bite.views.BoldTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_contact"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
+    android:gravity="center"
+    android:textColor="@color/black"
+    android:textSize="22sp"
+    android:text="+38(067) 222 32 12"
+    />

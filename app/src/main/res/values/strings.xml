@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Localeat</string>
+    <string name="server_url">https://agromarket.site</string>
+    <string name="text_menu">Menu</string>
+    <string name="text_search">Search…</string>
+    <string name="text_recommendation">We recommend</string>
+
+
+</resources>
