@@ -22,7 +22,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
 
     val selectedRestaurant = MutableLiveData<RestaurantObj?>()
 
-    val sales = MutableLiveData<MutableList<Sales>?>()
+    val sales = MutableLiveData<MutableList<RestaurantObj>?>()
 
     val foodTypes = MutableLiveData<MutableList<FoodType>?>()
     val selectedFoodType = MutableLiveData<FoodType>()
@@ -69,7 +69,8 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
             response?.add(response[0])
             response?.add(response[0])
 
-            restaurantList.postValue(response?.toMutableList())
+            restaurantList.postValue(response)
+            sales.postValue(response)
         }
     }
 
@@ -105,7 +106,6 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
                 Sales(7, "https://media-cdn.tripadvisor.com/media/photo-s/0e/ae/21/d9/getlstd-property-photo.jpg", "PestoCafe", "Акций: 2")
             )
 
-            sales.postValue(response)
         }
     }
 

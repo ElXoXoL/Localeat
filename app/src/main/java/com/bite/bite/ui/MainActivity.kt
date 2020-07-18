@@ -24,6 +24,7 @@ import com.bite.bite.utils.Logger
 import com.bite.bite.utils.SwipeDetector
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -104,6 +105,14 @@ class MainActivity : BaseActivity() {
 //                }
                 viewModel.cleanRestaurant()
                 super.onBackPressed()
+            }
+            is MapFragment -> {
+                val mapFragment = lastFragment as MapFragment
+                if (mapFragment.isInfoVisible){
+                    mapFragment.isInfoVisible = false
+                } else {
+                    super.onBackPressed()
+                }
             }
             else -> super.onBackPressed()
         }

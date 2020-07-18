@@ -9,10 +9,11 @@ import com.bite.bite.application.base.BaseAdapter
 import com.bite.bite.application.base.BaseViewHolder
 import com.bite.bite.application.extensions.color
 import com.bite.bite.application.extensions.load
+import com.bite.bite.models.RestaurantObj
 import com.bite.bite.models.Sales
 import kotlinx.android.synthetic.main.sales_item.view.*
 
-class AdapterSales(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<Sales>() {
+class AdapterSales(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<RestaurantObj>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(
@@ -24,12 +25,12 @@ class AdapterSales(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<Sales>() {
         return list.size
     }
 
-    inner class ViewHolder(view : View) : BaseViewHolder<Sales>(view) {
+    inner class ViewHolder(view : View) : BaseViewHolder<RestaurantObj>(view) {
 
-        override fun bind(item: Sales) {
+        override fun bind(item: RestaurantObj) {
 
-            itemView.img_sales_photo.load(item.img)
-            itemView.tv_sales_name.text = item.name
+            itemView.img_sales_photo.load(item.restaurant.img)
+            itemView.tv_sales_name.text = item.restaurant.name
 
             itemView.setOnClickListener {
                 itemClick(adapterPosition)
@@ -37,7 +38,7 @@ class AdapterSales(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<Sales>() {
         }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<Sales>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<RestaurantObj>, position: Int) {
         holder.bind(list[position])
     }
 

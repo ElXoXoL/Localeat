@@ -1,16 +1,13 @@
 package com.bite.bite.utils
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
+import android.graphics.*
+import android.graphics.Paint.Align
 import com.bite.bite.R
 import com.bite.bite.application.BiteApp
 import com.bite.bite.application.extensions.drawable
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
 
 class MapUtils(val context: Context) {
 

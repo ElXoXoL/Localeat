@@ -116,4 +116,37 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cs_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="gone"
+        >
+
+        <com.bite.bite.views.MediumTextView
+            android:id="@+id/tv_info_descr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/marginSide"
+            android:textColor="@color/whiteTrans"
+            android:textSize="18sp"
+            android:text="ASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSAASDASDSADSA"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.bite.bite.views.ExtraTextView
+            android:id="@+id/tv_info_contacts_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/marginSide"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:text="@string/text_contacts"
+            app:layout_constraintTop_toBottomOf="@id/tv_info_descr"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

@@ -55,6 +55,23 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     private val blue by lazy { context!!.color(R.color.blue) }
     private val purple by lazy { context!!.color(R.color.purple) }
 
+    var isInfoVisible = false
+        set(value) {
+            Logger.log(value)
+            if (field == value)
+                return
+
+            if (value) {
+                AnimationUtils.translateFromTop(cs_info)
+                mainActivity?.backVisibility = true
+            } else {
+                AnimationUtils.translateToTop(cs_info)
+                mainActivity?.backVisibility = false
+            }
+
+            field = value
+        }
+
     private val mainActivity: MainActivity?
         get() = activity as MainActivity?
 
@@ -64,7 +81,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         ovalBg = view_oval.background as GradientDrawable
         ovalBg?.setColor(purple)
 
-        mainActivity?.changeActionBtnClick { "SASI".snack(view) }
+        mainActivity?.changeActionBtnClick {
+            isInfoVisible = true
+        }
         mainActivity?.changeActionBtn(R.drawable.ic_info)
         this.exitTransition = null
 
@@ -97,11 +116,15 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
         viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                val fragment = RestaurantFragment().apply {
-                    enterTransition = TransitionUtils.slide
-                    this@MapFragment.exitTransition = TransitionUtils.fadeLinear
+                tv_info_contacts_label.visibility = View.INVISIBLE
+                tv_info_descr.visibility = View.INVISIBLE
+                AnimationUtils.translateFromTop(cs_info){
+                    val fragment = RestaurantFragment().apply {
+                        enterTransition = TransitionUtils.slide
+                        this@MapFragment.exitTransition = TransitionUtils.fadeLinear
+                    }
+                    replaceFragmentNoAnim(fragment)
                 }
-                replaceFragmentNoAnim(fragment)
             }
         })
     }
@@ -186,10 +209,14 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         restaurants.forEach {
             val options = MarkerOptions()
                 .position(LatLng(it.restaurant.lat.toDouble(), it.restaurant.lng.toDouble()))
-                .title(count++.toString())
+                .title(it.restaurant.name)
                 .icon(mapUtils.markerIconDefault)
 
-            markers.add(mMap?.addMarker(options)!!)
+            val marker = mMap?.addMarker(options)!!
+            marker.tag = count++
+            marker.showInfoWindow()
+
+            markers.add(marker)
         }
 
         viewModel.markerList.clear()
@@ -214,13 +241,14 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 //        rec_map_food_types.scheduleLayoutAnimation()
     }
 
-    private fun setSales(list: MutableList<Sales>?){
+    private fun setSales(list: MutableList<RestaurantObj>?){
         Logger.log("setFoodTypes")
         if (list == null) return
 
 //        rec_map_sales.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapterSales = AdapterSales{
             rec_map_sales.smoothScrollToPosition(it)
+            viewModel.selectRestaurant(it)
         }
         rec_map_sales.adapter = adapterSales
         rec_map_sales.setItemTransformer(
@@ -255,7 +283,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         val bounds = builder.build()
         val padding = 30.px // Padding from view edges
 
-        mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        try {
+            mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        } catch (e: Exception){
+            Logger.log(e)
+        }
     }
 
     private fun getMarkerXY(marker: Marker?){
@@ -264,13 +296,13 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val pos = marker.title.toInt()
+        val pos = marker.tag as Int
 
         mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
             marker.position,
             LocationUtils.ZOOM_DEFAULT_USER))
 
-//        viewModel.selectRestaurant(pos)
+        viewModel.selectRestaurant(pos)
 //        getMarkerXY(marker)
         return true
     }
@@ -288,16 +320,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     override fun onScrollEnd(p0: AdapterSales.ViewHolder, p1: Int) {}
 
     override fun onCurrentItemChanged(viewHolder: AdapterSales.ViewHolder?, adapterPosition: Int) { //viewHolder will never be null, because we never remove items from adapter's list
-
     }
 
     private fun changeOvalColor(position: Float, holderPos: Int){
         val startColor = if (holderPos == 0) purple else blue
         val endColor = if (holderPos == 0) blue else purple
-
-//        val fixedPosition = if (selectedInt == 0) position else abs(position - 1f)
-
-        Logger.log("$position -- $holderPos")
 
         val color = interpolate(position, startColor, endColor)
         ovalBg?.setColor(color)

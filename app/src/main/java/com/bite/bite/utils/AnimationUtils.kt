@@ -225,4 +225,31 @@ object AnimationUtils{
         view.visibility = View.VISIBLE
         view.startAnimation(animationShow)
     }
+
+    fun translateFromTop(view: View, action: (() -> (Unit))? = null){
+        val animationShow = AnimationUtils.loadAnimation(view.context, R.anim.item_anim_fall_from_top_full)
+        view.visibility = View.VISIBLE
+        if (action != null){
+            animationShow.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationRepeat(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    action()
+                }
+            })
+        }
+        view.startAnimation(animationShow)
+    }
+
+    fun translateToTop(view: View){
+        val animation = AnimationUtils.loadAnimation(view.context, R.anim.item_anim_fall_to_top_full)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationEnd(animation: Animation?) {
+                view.visibility = View.GONE
+            }
+        })
+        view.startAnimation(animation)
+    }
 }
