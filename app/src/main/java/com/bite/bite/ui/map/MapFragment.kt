@@ -31,6 +31,7 @@ import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.transform.Pivot
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer
 import kotlinx.android.synthetic.main.fragment_map.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
@@ -45,19 +46,24 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
     private val viewModel: MainViewModel by sharedViewModel()
 
+    // Location things
     private var lastLocation: Location? = null
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
-    private val mapUtils by lazy { MapUtils(context!!) }
-
+    // Utils for markers
+    private val mapUtils: MapUtils by inject()
+    private val locationUtils: LocationUtils by inject()
+    
+    // Evaluator, background and colors for oval
     private val evaluator by lazy { ArgbEvaluator() }
     private var ovalBg: GradientDrawable? = null
     private val blue by lazy { context!!.color(R.color.blue) }
     private val purple by lazy { context!!.color(R.color.purple) }
 
+    // Show or hide app info window
     var isInfoVisible = false
         set(value) {
-            Logger.log(value)
+            logger.log(value)
             if (field == value)
                 return
 
@@ -78,29 +84,19 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        ovalBg = view_oval.background as GradientDrawable
-        ovalBg?.setColor(purple)
+        setDefaultOval()
 
-        mainActivity?.changeActionBtnClick {
-            isInfoVisible = true
-        }
-        mainActivity?.changeActionBtn(R.drawable.ic_info)
+        setActionBtn()
+
         this.exitTransition = null
+        mainActivity?.backVisibility = false
 
         initMap()
         enableLocation()
 
-        btn_open_list.setOnClickListener {
-            replaceFragmentWithPopAnim(ListFragment())
-        }
-
-        btn_my_location.setOnClickListener {
-            getLastLocation(true)
-        }
+        setClicks()
 
         playOpenAnimations()
-
-        mainActivity?.backVisibility = false
 
         viewModel.restaurantList.observe(viewLifecycleOwner, Observer {
             setMarkers(it)
@@ -116,17 +112,22 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
         viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                tv_info_contacts_label.visibility = View.INVISIBLE
-                tv_info_descr.visibility = View.INVISIBLE
-                AnimationUtils.translateFromTop(cs_info){
-                    val fragment = RestaurantFragment().apply {
-                        enterTransition = TransitionUtils.slide
-                        this@MapFragment.exitTransition = TransitionUtils.fadeLinear
-                    }
-                    replaceFragmentNoAnim(fragment)
-                }
+                hideInfoContent()
+                openRestaurant()
             }
         })
+    }
+
+    private fun setDefaultOval(){
+        ovalBg = view_oval.background as GradientDrawable
+        ovalBg?.setColor(purple)
+    }
+
+    private fun setActionBtn(){
+        mainActivity?.changeActionBtnClick {
+            isInfoVisible = true
+        }
+        mainActivity?.changeActionBtn(R.drawable.ic_info)
     }
 
     private fun playOpenAnimations(){
@@ -139,6 +140,37 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         }
     }
 
+    private fun setClicks(){
+        btn_open_list.setOnClickListener {
+            replaceFragmentWithPopAnim(ListFragment())
+        }
+
+        btn_my_location.setOnClickListener {
+            getLastLocation(true)
+        }
+    }
+
+    private fun openRestaurant(){
+        AnimationUtils.translateFromTop(cs_info){
+            val fragment = RestaurantFragment().apply {
+                enterTransition = TransitionUtils.slide
+                this@MapFragment.exitTransition = TransitionUtils.fadeLinear
+            }
+            replaceFragmentNoAnim(fragment)
+        }
+    }
+
+    private fun hideInfoContent(){
+        tv_info_contacts_label.visibility = View.INVISIBLE
+        tv_info_descr.visibility = View.INVISIBLE
+    }
+
+    private fun initMap(){
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -149,32 +181,26 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
         mMap?.setMapStyle(MapStyleOptions.loadRawResourceStyle(activity, R.raw.style))
 
-        if (KoinComponents.locationUtils.isPermissionGranted(activity)) {
+        if (locationUtils.isPermissionGranted(activity)) {
             mMap?.isMyLocationEnabled = true
             buildGoogleApiClient()
+
             getLastLocation{
                 zoomBetweenMarkers()
             }
         }
-//        val kyivLatLng = LatLng(50.45466, 30.5238)
-//        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(kyivLatLng, LocationUtils.ZOOM_DEFAULT))
 
         // Add a marker in Sydney and move the camera\
     }
 
-    private fun initMap(){
-        val mapFragment = childFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-    }
-
     private fun buildGoogleApiClient() {
-        if (activity == null || !KoinComponents.locationUtils.isPermissionGranted(activity)) return
+        if (activity == null || !locationUtils.isPermissionGranted(activity)) return
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
     }
 
     private fun getLastLocation(isUserRequest: Boolean = false, onFailure: () -> (Unit) = {}){
-        if (activity == null || !KoinComponents.locationUtils.isPermissionGranted(activity)) return
+        if (activity == null || !locationUtils.isPermissionGranted(activity)) return
+
         fusedLocationClient?.lastLocation?.addOnSuccessListener(activity!!) { location ->
             // Got last known location. In some rare situations this can be null.
             if (location != null) {
@@ -191,14 +217,14 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
     // Checking and requesting location permission
     private fun enableLocation(){
-        if (!KoinComponents.locationUtils.isPermissionGranted(activity)){
-            KoinComponents.locationUtils.requestPermission(activity)
+        if (!locationUtils.isPermissionGranted(activity)){
+            locationUtils.requestPermission(activity)
         }
     }
 
     // Clearing all markers and adding new
     private fun setMarkers(restaurants: MutableList<RestaurantObj>?){
-        Logger.log("setMarkers")
+        logger.log("$this setMarkers", LogType.FuncCall)
         if (restaurants == null) return
 
         mMap?.clear()
@@ -222,11 +248,10 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         viewModel.markerList.clear()
         viewModel.markerList.addAll(markers)
 
-        zoomBetweenMarkers()
     }
 
     private fun setFoodTypes(list: MutableList<FoodType>?){
-        Logger.log("setFoodTypes")
+        logger.log("$this setFoodTypes", LogType.FuncCall)
         if (list == null) return
 
         rec_map_food_types.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -238,19 +263,18 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         list.forEach {
             adapterFoodTypes.addElem(it)
         }
-//        rec_map_food_types.scheduleLayoutAnimation()
     }
 
     private fun setSales(list: MutableList<RestaurantObj>?){
-        Logger.log("setFoodTypes")
+        logger.log("$this setFoodTypes", LogType.FuncCall)
         if (list == null) return
 
-//        rec_map_sales.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val adapterSales = AdapterSales{
             rec_map_sales.smoothScrollToPosition(it)
             viewModel.selectRestaurant(it)
         }
         rec_map_sales.adapter = adapterSales
+
         rec_map_sales.setItemTransformer(
             ScaleTransformer.Builder()
                 .setMinScale(0.8f)
@@ -267,13 +291,18 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
             adapterSales.addElem(it)
         }
 
-
-//        rec_map_sales.scheduleLayoutAnimation()
     }
 
     private fun zoomBetweenMarkers(){
         val markers = viewModel.markerList
-        if (markers.isNullOrEmpty()) return
+
+        if (markers.isNullOrEmpty()) {
+            // If markers isn't ready - zoom to Kyiv center
+            val kyivLatLng = LatLng(50.45466, 30.5238)
+            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(kyivLatLng, LocationUtils.ZOOM_DEFAULT))
+
+            return
+        }
 
         val builder = LatLngBounds.Builder()
         markers.forEach {
@@ -286,7 +315,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         try {
             mMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
         } catch (e: Exception){
-            Logger.log(e)
+            logger.log(e)
         }
     }
 

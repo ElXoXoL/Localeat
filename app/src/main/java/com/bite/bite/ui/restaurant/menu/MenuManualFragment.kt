@@ -13,7 +13,7 @@ import com.bite.bite.models.FoodItem
 import com.bite.bite.models.FoodType
 import com.bite.bite.ui.MainViewModel
 import com.bite.bite.utils.AnimationUtils
-import com.bite.bite.utils.Logger
+import com.bite.bite.utils.LogType
 import kotlinx.android.synthetic.main.fragment_menu_manual.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -35,6 +35,8 @@ class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
         viewModel.foodItems.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 setupFoodItems()
+
+                // Selects first position
                 viewModel.selectFoodType(0)
             }
         })
@@ -49,7 +51,7 @@ class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
     }
 
     private fun setFoodTypes(list: MutableList<FoodType>?){
-        Logger.log("setFoodTypes")
+        logger.log("$this setFoodTypes", LogType.FuncCall)
         if (list == null) return
 
         rec_menu_categories.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -64,22 +66,20 @@ class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
 
     }
 
+    // Recyclerview setup
     private fun setupFoodItems(){
         rec_menu_items.layoutManager = LinearLayoutManager(context)
         rec_menu_items.adapter = adapterFoodItems
         rec_menu_items.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             // We disable close on swipe when touched recycler and enable when touch is end
-
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 when (newState) {
-                    AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> { // Do something
-                        Logger.log("SCROLL_STATE_TOUCH_SCROLL")
+                    AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> { // Scroll touched
                         viewModel.isCurrentlyScrolling = true
                     }
-                    AbsListView.OnScrollListener.SCROLL_STATE_IDLE -> {
-                        Logger.log("SCROLL_STATE_IDLE")
+                    AbsListView.OnScrollListener.SCROLL_STATE_IDLE -> { // Scroll ended
                         viewModel.isCurrentlyScrolling = false
                     }
                     else -> { // Do something
@@ -90,7 +90,7 @@ class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
     }
 
     private fun setFoodItems(list: MutableList<FoodItem>?, foodType: FoodType){
-        Logger.log("setFoodItems")
+        logger.log("$this setFoodItems", LogType.FuncCall)
         if (list == null) return
 
         if (viewModel.isFromRight != null){

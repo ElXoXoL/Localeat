@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.ScaleAnimation
 import androidx.cardview.widget.CardView
 import com.bite.bite.R
+import com.bite.bite.koin.KoinComponents
 import com.bite.bite.models.ColorSet
 import com.google.android.material.animation.ArgbEvaluatorCompat
 
@@ -84,7 +85,7 @@ object AnimationUtils{
             }
             animator.start()
         } catch (e: Exception){
-            Logger.log(e)
+            KoinComponents.logger.log(e)
         }
     }
 

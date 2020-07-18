@@ -1,11 +1,20 @@
 package com.bite.bite.utils
 
 import android.util.Log
+import com.bite.bite.BuildConfig
 
-object Logger {
+enum class LogType {
+    Default,
+    FuncCall,
+    ApiCall
+}
 
-    fun log(obj: Any?){
-        Log.d("TEMPTAG", obj.toString())
+class Logger {
+
+    private val isLogsEnabled = BuildConfig.DEBUG
+
+    fun log(obj: Any?, logType: LogType = LogType.Default){
+        if (isLogsEnabled) Log.d(logType.name, obj.toString())
     }
 
 }

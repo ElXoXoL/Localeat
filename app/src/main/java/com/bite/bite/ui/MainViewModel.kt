@@ -9,29 +9,40 @@ import com.bite.bite.application.base.BaseViewModel
 import com.bite.bite.application.runOnWorker
 import com.bite.bite.models.*
 import com.bite.bite.ui.list.AdapterRestaurants
+import com.bite.bite.utils.LogType
 import com.bite.bite.utils.Logger
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.withContext
 
-class MainViewModel(private val networkRepository: NetworkRepository) : BaseViewModel(){
+class MainViewModel(
+    private val networkRepository: NetworkRepository,
+    private val logger: Logger
+    ) : BaseViewModel(){
 
     val restaurantList = MutableLiveData<MutableList<RestaurantObj>?>()
     val markerList = mutableListOf<Marker>()
 
-    val selectedRestaurant = MutableLiveData<RestaurantObj?>()
-
     val sales = MutableLiveData<MutableList<RestaurantObj>?>()
 
+    val selectedRestaurant = MutableLiveData<RestaurantObj?>()
+
+    // Food types for menu, map and list
     val foodTypes = MutableLiveData<MutableList<FoodType>?>()
+
+    // Selected food type in menu
     val selectedFoodType = MutableLiveData<FoodType>()
+
+    // Menu items
+    val foodItems = MutableLiveData<MutableList<FoodItem>?>()
 
     val contacts = MutableLiveData<MutableList<Contact>?>()
 
     // Boolean for checking if any view is scrolling to be able to cancel swipe event
     var isCurrentlyScrolling = false
 
+    // Selected food type in menu
     private var selectedFoodTypePos = -1
     set(value) {
         isFromRight = when {
@@ -42,11 +53,8 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
         }
         field = value
     }
+    // Animation from right or left for menu items
     var isFromRight: Boolean? = null
-
-    val foodItems = MutableLiveData<MutableList<FoodItem>?>()
-
-    var transitionElem: TransitionElem? = null
 
     init {
         getRestaurants()
@@ -57,7 +65,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
     }
 
     private fun getRestaurants(){
-        Logger.log("getRestaurants")
+        logger.log("$this getRestaurants", LogType.FuncCall)
         runOnWorker {
             val response = networkRepository.getRestaurants()?.map {
                 RestaurantObj(it)
@@ -75,7 +83,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
     }
 
     private fun getFoodTypes(){
-        Logger.log("getFoodTypes")
+        logger.log("$this getFoodTypes", LogType.FuncCall)
         runOnWorker {
 //            val response = networkRepository.getRestaurants()
             val response = mutableListOf(
@@ -93,7 +101,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
     }
 
     private fun getSales(){
-        Logger.log("getSales")
+        logger.log("$this getSales", LogType.FuncCall)
         runOnWorker {
             //            val response = networkRepository.getRestaurants()
             val response = mutableListOf(
@@ -110,7 +118,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
     }
 
     private fun getFoodItems(){
-        Logger.log("getFoodItems")
+        logger.log("$this getFoodItems", LogType.FuncCall)
         runOnWorker {
             //            val response = networkRepository.getRestaurants()
             val response = mutableListOf(
@@ -133,7 +141,7 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
     }
 
     private fun getContacts(){
-        Logger.log("getContacts")
+        logger.log("$this getContacts", LogType.FuncCall)
         runOnWorker {
             //            val response = networkRepository.getRestaurants()
             val response = mutableListOf(
@@ -145,10 +153,12 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
         }
     }
 
+    // Selects restaurant from position
     fun selectRestaurant(pos: Int){
         selectedRestaurant.value = restaurantList.value!![pos]
     }
 
+    // Selects food type from position
     fun selectFoodType(pos: Int){
         if (selectedFoodTypePos == pos) return
 
@@ -156,11 +166,13 @@ class MainViewModel(private val networkRepository: NetworkRepository) : BaseView
         selectedFoodType.value = foodTypes.value!![pos]
     }
 
+    // Sets default food type
     fun defaultFoodType(){
         selectedFoodTypePos = -1
         isFromRight = null
     }
 
+    // Cleans restaurant selection
     fun cleanRestaurant(){
         selectedRestaurant.value = null
     }

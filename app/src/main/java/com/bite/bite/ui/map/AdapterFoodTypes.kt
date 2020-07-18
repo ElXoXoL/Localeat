@@ -18,8 +18,8 @@ import kotlinx.android.synthetic.main.food_type_elem.view.*
 
 class AdapterFoodTypes(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<FoodType>() {
 
-    var selectedPos = 0
-    var lastSelectedView: View? = null
+    private var selectedPos = 0
+    private var lastSelectedView: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(

@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Tasks
 import com.bite.bite.R
 import com.bite.bite.application.BiteApp
 import com.bite.bite.application.glide.GlideApp
+import com.bite.bite.koin.KoinComponents
 import com.bite.bite.utils.Logger
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +47,6 @@ fun ImageView.load(url: String?){
 }
 
 fun loadBitmap(url: String?): Bitmap{
-    Logger.log("loadBitmap")
     return GlideApp
         .with(BiteApp.instance)
         .asBitmap()
@@ -263,7 +263,7 @@ fun RecyclerView.toPos(pos: Int){
         smoothScroller.targetPosition = pos
         this.layoutManager?.startSmoothScroll(smoothScroller)
     } catch (e: Exception){
-        Logger.log(e)
+        KoinComponents.logger.log(e)
     }
 }
 

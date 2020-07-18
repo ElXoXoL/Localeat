@@ -22,6 +22,6 @@ suspend fun runOnMain(function: () -> Unit) {
 fun delayFunc(time: Long, function: () -> Unit){
         Handler().postDelayed({
             try { function() }
-            catch (e: Exception){ Logger.log(e) }
+            catch (e: Exception){ KoinComponents.logger.log(e) }
         }, time)
 }

@@ -1,19 +1,22 @@
 package com.bite.bite.application.base
 
 import android.util.Log
+import com.bite.bite.koin.KoinComponents
 import retrofit2.Response
 import com.bite.bite.models.Result
-import com.bite.bite.utils.Logger
+import com.bite.bite.utils.LogType
 import java.io.IOException
 
 open class BaseRepository{
+    
+    val logger = KoinComponents.logger
 
     suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? {
 
         val result : Result<T> = safeApiResult(call,errorMessage)
         var data : T? = null
 
-        Logger.log(result)
+        logger.log(result, LogType.ApiCall)
 
         when(result) {
             is Result.Success ->

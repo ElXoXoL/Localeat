@@ -1,8 +1,6 @@
 package com.bite.bite.utils
 
 import android.graphics.Color
-import android.view.animation.BounceInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import androidx.transition.Fade
 import androidx.transition.Slide

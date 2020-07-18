@@ -22,7 +22,7 @@ import com.bite.bite.models.TransitionElem
 import com.bite.bite.ui.MainViewModel
 import kotlinx.android.synthetic.main.restaurant_list_elem.view.*
 
-class AdapterRestaurants(val itemClick: (pos: Int, elem: TransitionElem) -> (Unit)): BaseAdapter<RestaurantObj>() {
+class AdapterRestaurants(val itemClick: (pos: Int) -> (Unit)): BaseAdapter<RestaurantObj>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(
@@ -42,8 +42,6 @@ class AdapterRestaurants(val itemClick: (pos: Int, elem: TransitionElem) -> (Uni
 
         override fun bind(item: RestaurantObj) {
 
-            itemView.cons_restaurant_item.transitionName = "view${item.restaurant.id}"
-
 //            runOnWorker {
 //                item.bitmap = item.bitmap ?: loadBitmap(item.restaurant.img)
 //                runOnMain {
@@ -55,12 +53,7 @@ class AdapterRestaurants(val itemClick: (pos: Int, elem: TransitionElem) -> (Uni
 
             itemView.tv_item_name.text = item.restaurant.name
 
-            itemView.setOnClickListener {
-
-                itemClick(
-                    adapterPosition,
-                    TransitionElem(itemView.cons_restaurant_item, itemView.cons_restaurant_item.transitionName))
-            }
+            itemView.setOnClickListener { itemClick(adapterPosition) }
         }
     }
 

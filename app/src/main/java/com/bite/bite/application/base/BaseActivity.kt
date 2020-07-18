@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bite.bite.models.TransitionElem
 import com.bite.bite.utils.FragmentUtils
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 abstract class BaseActivity: AppCompatActivity() {
 
-    private val fragmentUtils by lazy { FragmentUtils(this) }
+    private val fragmentUtils: FragmentUtils by inject { parametersOf(this)}
 
+    // Disable on back press click for some millis
+    // It sets assigned value plus current system time
     var disabledTimeClick: Long? = null
         set(value) {
             field = if (value != null) value + SystemClock.elapsedRealtime() else null

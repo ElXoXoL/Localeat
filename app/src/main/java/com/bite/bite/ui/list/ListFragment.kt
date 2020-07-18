@@ -16,7 +16,7 @@ import com.bite.bite.ui.MainActivity
 import com.bite.bite.ui.MainViewModel
 import com.bite.bite.ui.map.AdapterFoodTypes
 import com.bite.bite.ui.restaurant.RestaurantFragment
-import com.bite.bite.utils.Logger
+import com.bite.bite.utils.LogType
 import com.bite.bite.utils.TransitionUtils
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -32,14 +32,11 @@ class ListFragment : BaseFragment(R.layout.fragment_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainActivity?.changeActionBtn(R.drawable.ic_star_white_empty)
-        mainActivity?.changeActionBtnClick {
-            replaceFragmentWithPopAnim(FavouriteListFragment())
-        }
         mainActivity?.backVisibility = true
 
-        this.exitTransition = null
-        this.enterTransition = null
+        setActionBtn()
+
+        setDefaultTransitions()
 
         viewModel.restaurantList.observe(viewLifecycleOwner, Observer {
             setList(it)
@@ -51,24 +48,40 @@ class ListFragment : BaseFragment(R.layout.fragment_list) {
 
         viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                val fragment = RestaurantFragment().apply {
-                    enterTransition = TransitionUtils.slide
-                    this@ListFragment.exitTransition = TransitionUtils.fadeLinear
-                }
-
-                replaceFragmentNoAnim(fragment)
+                openRestaurantFragment()
             }
         })
     }
 
+    // Sets right toolbar btn click and image
+    private fun setActionBtn(){
+        mainActivity?.changeActionBtn(R.drawable.ic_star_white_empty)
+        mainActivity?.changeActionBtnClick {
+            replaceFragmentWithPopAnim(FavouriteListFragment())
+        }
+    }
+
+    private fun setDefaultTransitions(){
+        this.exitTransition = null
+        this.enterTransition = null
+    }
+
+    private fun openRestaurantFragment(){
+        val fragment = RestaurantFragment().apply {
+            enterTransition = TransitionUtils.slide
+            this@ListFragment.exitTransition = TransitionUtils.fadeLinear
+        }
+
+        replaceFragmentNoAnim(fragment)
+    }
+
     // Clearing all markers and adding new
     private fun setList(restaurants: MutableList<RestaurantObj>?){
-        Logger.log("setList")
+        logger.log("$this setList", LogType.FuncCall)
         if (restaurants == null) return
 
         rec_rest_list.layoutManager = LinearLayoutManager(context)
-        val adapterRestaurants = AdapterRestaurants{ pos, elem ->
-            viewModel.transitionElem = elem
+        val adapterRestaurants = AdapterRestaurants{ pos ->
             rec_rest_list.toPos(pos)
             viewModel.selectRestaurant(pos)
         }
@@ -80,7 +93,7 @@ class ListFragment : BaseFragment(R.layout.fragment_list) {
     }
 
     private fun setFoodTypes(list: MutableList<FoodType>?){
-        Logger.log("setFoodTypes")
+        logger.log("$this setFoodTypes", LogType.FuncCall)
         if (list == null) return
 
         rec_list_food_types.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

@@ -37,19 +37,23 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mainActivity?.backVisibility = true
+
+        setActionBtn()
+
+        setClicks()
+
+        setRestaurantData(viewModel.selectedRestaurant.value)
+
+        playOpenAnimations()
+
+    }
+
+    private fun setActionBtn(){
         mainActivity?.changeActionBtn(R.drawable.ic_phone)
         mainActivity?.changeActionBtnClick {
             DialogContacts(mainActivity!!, viewModel.contacts.value!!)
         }
-
-        mainActivity?.backVisibility = true
-
-        card_rest_container.transitionName = viewModel.transitionElem?.name
-        setClicks()
-
-        setRestaurantData(viewModel.selectedRestaurant.value)
-        playOpenAnimations()
-
     }
 
     private fun playOpenAnimations(){
@@ -80,14 +84,12 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
 //                img_rest_photo.load(item.bitmap)
 //            }
 //        }
+
         img_rest_photo.load(item.restaurant.img)
 
         tv_rest_description.text = item.restaurant.description
         tv_rest_name.text = item.restaurant.name
 
-//        Handler().postDelayed({
-//            animateImage()
-//        }, 150)
     }
 
     private fun animateImage(){
@@ -108,7 +110,7 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
         anim.start()
     }
 
-    fun animateImageBack(onFinished: () -> (Unit)){
+    private fun animateImageBack(onFinished: () -> (Unit)){
         if (img_rest_photo == null)
             return
 

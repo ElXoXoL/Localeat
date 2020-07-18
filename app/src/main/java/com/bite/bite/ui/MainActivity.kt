@@ -30,15 +30,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
 
-    val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel()
 
+    // Last drawable resource on action btn
+    // It is for checking if we need to animate changes
     private var lastActionDrawableRes: Int? = null
 
+    // Swipe detector
     private val gestureDetector by lazy { GestureDetector(this, SwipeDetector{
-        Logger.log("SWipe")
         if (!viewModel.isCurrentlyScrolling) {
-            Logger.log("Swipe active")
-
             gestureOnBackPressed()
         }
     }) }
@@ -74,6 +74,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    // Set backBtn visible of invisible if value has changed
     var backVisibility: Boolean = false
         set(value) {
             if (value == field) {
@@ -92,11 +93,15 @@ class MainActivity : BaseActivity() {
             field = value
         }
 
+    // Override on back press if some special things is needed
     override fun onBackPressed() {
+        // Check if back press is allowed
         if (disabledTimeClick != null && SystemClock.elapsedRealtime() < disabledTimeClick!!)
             return
 
-        disabledTimeClick = 400
+        // Disabling next back click for some millis
+        disabledTimeClick = 500
+
         when (lastFragment){
             is RestaurantFragment -> {
 //                (lastFragment as? RestaurantFragment)?.animateImageBack {
@@ -118,6 +123,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    // Swipe emulates onBackPressed only in some fragments
     private fun gestureOnBackPressed(){
         when (lastFragment){
             is RestaurantFragment, is MenuManualFragment -> onBackPressed()
