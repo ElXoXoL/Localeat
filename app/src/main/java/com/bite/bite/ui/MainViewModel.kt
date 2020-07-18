@@ -33,14 +33,6 @@ class MainViewModel(
     // Food types for menu, map and list
     val foodTypes = MutableLiveData<MutableList<FoodType>?>()
 
-    // Selected food type in menu
-    val selectedFoodType = MutableLiveData<FoodType>()
-
-    // Menu items
-    val foodItems = MutableLiveData<MutableList<FoodItem>?>()
-
-    val contacts = MutableLiveData<MutableList<Contact>?>()
-
     // Boolean for checking if any view is scrolling to be able to cancel swipe event
     var isCurrentlyScrolling = false
 
@@ -62,8 +54,6 @@ class MainViewModel(
         getRestaurants()
         getFoodTypes()
         getSales()
-        getFoodItems()
-        getContacts()
     }
 
     private fun getRestaurants(){
@@ -121,59 +111,9 @@ class MainViewModel(
         }
     }
 
-    private fun getFoodItems(){
-        logger.log("$this getFoodItems", LogType.FuncCall)
-        runOnWorker {
-            //            val response = networkRepository.getRestaurants()
-            val response = mutableListOf(
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f),
-                FoodItem(1, 1, "Цезарь", "390 г.", 150f)
-            )
-
-            foodItems.postValue(response)
-        }
-    }
-
-    private fun getContacts(){
-        logger.log("$this getContacts", LogType.FuncCall)
-        runOnWorker {
-            //            val response = networkRepository.getRestaurants()
-            val response = mutableListOf(
-                Contact(1, "+38 (067) 322 13 32"),
-                Contact(2, "+38 (067) 322 13 32")
-            )
-
-            contacts.postValue(response)
-        }
-    }
-
     // Selects restaurant from position
     fun selectRestaurant(pos: Int){
         selectedRestaurant.value = restaurantList.value!![pos]
-    }
-
-    // Selects food type from position
-    fun selectFoodType(pos: Int){
-        if (selectedFoodTypePos == pos) return
-
-        selectedFoodTypePos = pos
-        selectedFoodType.value = foodTypes.value!![pos]
-    }
-
-    // Sets default food type
-    fun defaultFoodType(){
-        selectedFoodTypePos = -1
-        isFromRight = null
     }
 
     // Cleans restaurant selection

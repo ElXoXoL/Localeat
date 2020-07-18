@@ -4,17 +4,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.bite.bite.R
+import com.bite.bite.koin.KoinComponents
 import com.bite.bite.models.TransitionElem
 
 class FragmentUtils(private val activity: AppCompatActivity) {
 
     // Last fragment loaded
     var lastFragment: Fragment? = null
-    
+
     private val supportFragmentManager: FragmentManager
         get() = activity.supportFragmentManager
 
-    private val fragmentCount: Int
+    val fragmentCount: Int
         get() = supportFragmentManager.backStackEntryCount
 
     private fun getLastFragmentInStack(): Fragment?{
@@ -36,6 +37,8 @@ class FragmentUtils(private val activity: AppCompatActivity) {
         // If only 1 fragment in stack - pop it to be able to close activity on backPress
         if (fragmentCount == 1){
             popBackStack()
+            lastFragment = null
+            return
         }
         lastFragment = getLastFragmentInStack()
     }

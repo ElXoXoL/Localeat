@@ -19,6 +19,12 @@ abstract class BaseActivity: AppCompatActivity() {
             field = if (value != null) value + SystemClock.elapsedRealtime() else null
         }
 
+    val lastFragment: Fragment?
+        get() = fragmentUtils.lastFragment
+
+    val fragmentCount: Int
+        get() = fragmentUtils.fragmentCount
+
     override fun onBackPressed() {
         fragmentUtils.onBackPressed()
         super.onBackPressed()
@@ -43,8 +49,5 @@ abstract class BaseActivity: AppCompatActivity() {
     fun replaceFragmentNoAnimNoStack(fragment: Fragment){
         fragmentUtils.replaceFragmentNoAnimNoStack(fragment)
     }
-
-    val lastFragment: Fragment?
-        get() = fragmentUtils.lastFragment
 
 }

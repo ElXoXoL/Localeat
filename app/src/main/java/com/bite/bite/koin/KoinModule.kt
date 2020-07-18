@@ -26,7 +26,7 @@ val appModule = module {
 
     single { MapUtils(get()) }
 
-    single { (activity: AppCompatActivity) -> FragmentUtils(activity) }
+    factory { (activity: AppCompatActivity) -> FragmentUtils(activity) }
 
     viewModel { MainViewModel(get(), get()) }
 

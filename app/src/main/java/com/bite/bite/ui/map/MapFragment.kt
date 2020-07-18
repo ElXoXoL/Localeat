@@ -50,6 +50,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     private var lastLocation: Location? = null
     private var fusedLocationClient: FusedLocationProviderClient? = null
 
+    // Marker clicker
+    private var markerClicker: ClickDelayer? = null
+
     // Utils for markers
     private val mapUtils: MapUtils by inject()
     private val locationUtils: LocationUtils by inject()
@@ -90,6 +93,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
         this.exitTransition = null
         mainActivity?.backVisibility = false
+        markerClicker = null
 
         initMap()
         enableLocation()
@@ -330,13 +334,20 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val pos = marker.tag as Int
+        if (markerClicker == null) {
+            markerClicker = ClickDelayer(500){
+                val pos = marker.tag as Int
 
-        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
-            marker.position,
-            LocationUtils.ZOOM_DEFAULT_USER))
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    marker.position,
+                    LocationUtils.ZOOM_DEFAULT_USER))
 
-        viewModel.selectRestaurant(pos)
+                viewModel.selectRestaurant(pos)
+            }
+        }
+
+        markerClicker?.callClick()
+
 //        getMarkerXY(marker)
         return true
     }

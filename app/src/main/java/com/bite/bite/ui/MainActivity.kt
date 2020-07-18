@@ -15,13 +15,11 @@ import com.bite.bite.application.extensions.color
 import com.bite.bite.application.extensions.drawable
 import com.bite.bite.application.extensions.load
 import com.bite.bite.application.extensions.loadAnim
+import com.bite.bite.koin.KoinComponents
 import com.bite.bite.ui.map.MapFragment
 import com.bite.bite.ui.restaurant.RestaurantFragment
 import com.bite.bite.ui.restaurant.menu.MenuManualFragment
-import com.bite.bite.utils.AnimType
-import com.bite.bite.utils.AnimationUtils
-import com.bite.bite.utils.Logger
-import com.bite.bite.utils.SwipeDetector
+import com.bite.bite.utils.*
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_map.*
@@ -36,6 +34,8 @@ class MainActivity : BaseActivity() {
     // It is for checking if we need to animate changes
     private var lastActionDrawableRes: Int? = null
 
+    private var actionClickDelayer: ClickDelayer? = null
+
     // Swipe detector
     private val gestureDetector by lazy { GestureDetector(this, SwipeDetector{
         if (!viewModel.isCurrentlyScrolling) {
@@ -49,8 +49,6 @@ class MainActivity : BaseActivity() {
 
         img_toolbar_logo.load(R.drawable.ic_logotipok)
         btn_toolbar_back.load(R.drawable.ic_arrow_back)
-
-        replaceFragmentNoAnim(MapFragment())
 
         btn_toolbar_back.setOnClickListener {
             onBackPressed()
@@ -69,8 +67,16 @@ class MainActivity : BaseActivity() {
     }
 
     fun changeActionBtnClick(click: () -> (Unit)){
+        if (actionClickDelayer == null){
+            actionClickDelayer = ClickDelayer(500){
+                click()
+            }
+        } else {
+            actionClickDelayer?.changeClick(click)
+        }
+
         btn_toolbar_action.setOnClickListener {
-            click()
+           actionClickDelayer?.callClick()
         }
     }
 
@@ -152,6 +158,12 @@ class MainActivity : BaseActivity() {
             gradientDrawable.colors = newArray
         }
         animator.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (fragmentCount == 0)
+            replaceFragmentNoAnim(MapFragment())
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean { // TouchEvent dispatcher.
