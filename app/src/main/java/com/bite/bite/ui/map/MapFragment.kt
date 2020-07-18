@@ -102,6 +102,11 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
             setMarkers(it)
         })
 
+        viewModel.isError.observe(viewLifecycleOwner, Observer {
+            if (it) it.toString().toast()
+            viewModel.isError.value = false
+        })
+
         viewModel.foodTypes.observe(viewLifecycleOwner, Observer {
             setFoodTypes(it)
         })

@@ -24,6 +24,7 @@ interface ApiService {
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(URL)
+                .client(LocaleatHttpClient().client)
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()

@@ -21,6 +21,8 @@ class MainViewModel(
     private val logger: Logger
     ) : BaseViewModel(){
 
+    val isError = MutableLiveData<Boolean>()
+
     val restaurantList = MutableLiveData<MutableList<RestaurantObj>?>()
     val markerList = mutableListOf<Marker>()
 
@@ -67,7 +69,9 @@ class MainViewModel(
     private fun getRestaurants(){
         logger.log("$this getRestaurants", LogType.FuncCall)
         runOnWorker {
-            val response = networkRepository.getRestaurants()?.map {
+            val response = networkRepository.getRestaurants{
+                isError.postValue(true)
+            }?.map {
                 RestaurantObj(it)
             }?.toMutableList()
             response?.add(response[0])

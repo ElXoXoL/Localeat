@@ -18,10 +18,10 @@ class NetworkRepository: BaseRepository(){
 
     private val apiService by lazy { ApiService.create() }
 
-    suspend fun getRestaurants(): MutableList<Restaurant>?{
+    suspend fun getRestaurants(onError: () -> (Unit)): MutableList<Restaurant>?{
         val response = safeApiCall(
             call = {apiService.getRestaurants().await()},
-            errorMessage = "Error getting restaurants"
+            onError = onError
         )
         return response?.toMutableList()
     }
