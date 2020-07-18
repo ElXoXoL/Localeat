@@ -1,32 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="200dp"
-    android:maxHeight="300dp"
-    android:layout_marginStart="@dimen/marginSide"
-    android:layout_marginEnd="@dimen/marginSide"
-    android:layout_marginBottom="50dp"
+    android:layout_height="250dp"
+    android:layout_margin="@dimen/marginSide"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"
+        android:paddingStart="@dimen/marginSide"
+        android:paddingEnd="@dimen/marginSide"
         android:background="@drawable/sales_item_bg"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rec_contacts"
+        <com.bite.bite.views.BoldTextView
+            android:id="@+id/tv_contact_1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:layout_marginStart="@dimen/marginSide"
-            android:layout_marginEnd="@dimen/marginSide"
-            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:text="+38(067) 222 32 12"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_contact_2"
+            />
+
+        <com.bite.bite.views.BoldTextView
+            android:id="@+id/tv_contact_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:text="+38(067) 222 32 12"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tv_contact_1"
+            app:layout_constraintBottom_toTopOf="@id/tv_contact_3"
+            />
+
+        <com.bite.bite.views.BoldTextView
+            android:id="@+id/tv_contact_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:text="+38(067) 222 32 12"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/tv_contact_2"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -37,7 +69,6 @@
         android:layout_height="60dp"
         android:background="@drawable/btn_circle_yellow"
         android:scaleType="center"
-        android:elevation="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

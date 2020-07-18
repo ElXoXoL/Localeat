@@ -1,5 +1,7 @@
 package com.bite.bite.application.extensions
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -108,6 +110,12 @@ fun Context.drawable(@DrawableRes resId: Int?): Drawable?{
 
 fun Context.color(@ColorRes resId: Int): Int{
     return ContextCompat.getColor(this, resId)
+}
+
+fun Context.copyToClipboard(text: String){
+    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("LocaleatClip", text)
+    clipboard.setPrimaryClip(clip)
 }
 
 fun <T>Task<T>.await(): T{
@@ -274,7 +282,9 @@ fun BottomSheetDialog.setAlwaysExpanded(){
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet!!)
 
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(p0: View, p1: Float) {}
+            override fun onSlide(p0: View, p1: Float) {
+                KoinComponents.logger.log(p1)
+            }
 
             override fun onStateChanged(v: View, newState: Int) {
                 when (newState){

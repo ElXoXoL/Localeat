@@ -4,17 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.os.Handler
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.bite.bite.R
 import com.bite.bite.application.base.BaseFragment
 import com.bite.bite.application.delayFunc
 import com.bite.bite.application.extensions.load
-import com.bite.bite.application.extensions.loadBitmap
-import com.bite.bite.application.runOnMain
-import com.bite.bite.application.runOnWorker
 import com.bite.bite.models.RestaurantObj
 import com.bite.bite.ui.MainActivity
 import com.bite.bite.ui.MainViewModel
@@ -25,11 +21,13 @@ import com.bite.bite.utils.AnimationUtils
 import com.bite.bite.utils.TransitionUtils
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
 
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val mainViewModel: MainViewModel by sharedViewModel()
+    private val viewModel: RestaurantViewModel by viewModel()
 
     private val mainActivity: MainActivity?
         get() = activity as MainActivity?
@@ -43,10 +41,13 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
 
         setClicks()
 
-        setRestaurantData(viewModel.selectedRestaurant.value)
+        viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
+            setRestaurantData(it)
+        })
 
         playOpenAnimations()
 
+        viewModel.selectedRestaurant.postValue(mainViewModel.selectedRestaurant.value)
     }
 
     private fun setActionBtn(){
@@ -70,6 +71,7 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
             val fragment = MenuManualFragment().apply {
                 enterTransition = TransitionUtils.slide
                 this@RestaurantFragment.exitTransition = TransitionUtils.fadeLinear
+                viewModel = this@RestaurantFragment.viewModel
             }
             replaceFragmentNoAnim(fragment)
         }

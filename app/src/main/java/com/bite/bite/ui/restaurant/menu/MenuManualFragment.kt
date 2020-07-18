@@ -12,6 +12,7 @@ import com.bite.bite.application.extensions.toPos
 import com.bite.bite.models.FoodItem
 import com.bite.bite.models.FoodType
 import com.bite.bite.ui.MainViewModel
+import com.bite.bite.ui.restaurant.RestaurantViewModel
 import com.bite.bite.utils.AnimationUtils
 import com.bite.bite.utils.LogType
 import kotlinx.android.synthetic.main.fragment_menu_manual.*
@@ -20,8 +21,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
 
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val mainViewModel: MainViewModel by sharedViewModel()
     private val adapterFoodItems by lazy { AdapterFoodItems() }
+    lateinit var viewModel: RestaurantViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,10 +79,10 @@ class MenuManualFragment: BaseFragment(R.layout.fragment_menu_manual){
                 super.onScrollStateChanged(recyclerView, newState)
                 when (newState) {
                     AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL -> { // Scroll touched
-                        viewModel.isCurrentlyScrolling = true
+                        mainViewModel.isCurrentlyScrolling = true
                     }
                     AbsListView.OnScrollListener.SCROLL_STATE_IDLE -> { // Scroll ended
-                        viewModel.isCurrentlyScrolling = false
+                        mainViewModel.isCurrentlyScrolling = false
                     }
                     else -> { // Do something
                     }

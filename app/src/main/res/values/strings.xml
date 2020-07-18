@@ -5,6 +5,7 @@
     <string name="text_search">Search…</string>
     <string name="text_recommendation">We recommend</string>
     <string name="text_contacts">Contacts</string>
+    <string name="text_copied_phone">Phone copied to clipboard</string>
 
 
 </resources>

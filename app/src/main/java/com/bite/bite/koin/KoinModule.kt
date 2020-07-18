@@ -5,6 +5,7 @@ import com.bite.bite.api.NetworkRepository
 import com.bite.bite.coroutines.CoroutineProvider
 import com.bite.bite.coroutines.CoroutinesExecutor
 import com.bite.bite.ui.MainViewModel
+import com.bite.bite.ui.restaurant.RestaurantViewModel
 import com.bite.bite.utils.FragmentUtils
 import com.bite.bite.utils.LocationUtils
 import com.bite.bite.utils.Logger
@@ -28,6 +29,8 @@ val appModule = module {
     single { (activity: AppCompatActivity) -> FragmentUtils(activity) }
 
     viewModel { MainViewModel(get(), get()) }
+
+    viewModel { RestaurantViewModel(get(), get(), get()) }
 
 }
 
