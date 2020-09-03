@@ -19,7 +19,7 @@ open class BaseRepository{
                 if (onError != null)
                     onError()
 
-                Log.d("1.DataRepository", "Exception - ${result.exception}")
+                Log.d("DataRepository", "Exception - ${result.exception}")
             }
         }
 
