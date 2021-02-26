@@ -51,10 +51,10 @@ class FavouriteListFragment : BaseFragment(R.layout.fragment_list) {
 
     // Sets right toolbar btn click and image
     private fun setActionBtn(){
-        mainActivity?.changeActionBtn(R.drawable.ic_star_white)
-        mainActivity?.changeActionBtnClick {
-            mainActivity?.onBackPressed()
-        }
+//        mainActivity?.changeActionBtn(R.drawable.ic_star_white)
+//        mainActivity?.changeActionBtnClick {
+//            mainActivity?.onBackPressed()
+//        }
     }
 
     private fun openRestaurantFragment(){

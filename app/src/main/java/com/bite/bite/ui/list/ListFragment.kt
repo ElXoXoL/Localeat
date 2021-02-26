@@ -55,10 +55,10 @@ class ListFragment : BaseFragment(R.layout.fragment_list) {
 
     // Sets right toolbar btn click and image
     private fun setActionBtn(){
-        mainActivity?.changeActionBtn(R.drawable.ic_star_white_empty)
-        mainActivity?.changeActionBtnClick {
-            replaceFragmentWithPopAnim(FavouriteListFragment())
-        }
+//        mainActivity?.changeActionBtn(R.drawable.ic_star_white_empty)
+//        mainActivity?.changeActionBtnClick {
+//            replaceFragmentWithPopAnim(FavouriteListFragment())
+//        }
     }
 
     private fun setDefaultTransitions(){

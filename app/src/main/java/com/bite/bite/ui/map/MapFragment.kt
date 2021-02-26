@@ -1,6 +1,7 @@
 package com.bite.bite.ui.map
 
 import android.animation.ArgbEvaluator
+import android.annotation.SuppressLint
 import android.graphics.drawable.GradientDrawable
 import android.location.Location
 import android.os.Bundle
@@ -11,10 +12,8 @@ import com.bite.bite.R
 import com.bite.bite.application.base.BaseFragment
 import com.bite.bite.application.delayFunc
 import com.bite.bite.application.extensions.*
-import com.bite.bite.koin.KoinComponents
 import com.bite.bite.models.FoodType
 import com.bite.bite.models.RestaurantObj
-import com.bite.bite.models.Sales
 import com.bite.bite.ui.MainActivity
 import com.bite.bite.ui.MainViewModel
 import com.bite.bite.ui.list.ListFragment
@@ -60,7 +59,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     // Evaluator, background and colors for oval
     private val evaluator by lazy { ArgbEvaluator() }
     private var ovalBg: GradientDrawable? = null
-    private val blue by lazy { context!!.color(R.color.blue) }
+    private val blue by lazy { context!!.color(R.color.yellow) }
     private val purple by lazy { context!!.color(R.color.purple) }
 
     // Show or hide app info window
@@ -115,9 +114,9 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
             setFoodTypes(it)
         })
 
-        viewModel.sales.observe(viewLifecycleOwner, Observer {
-            setSales(it)
-        })
+//        viewModel.recents.observe(viewLifecycleOwner, Observer {
+//            setRecents(it)
+//        })
 
         viewModel.selectedRestaurant.observe(viewLifecycleOwner, Observer {
             if (it != null) {
@@ -128,15 +127,15 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     }
 
     private fun setDefaultOval(){
-        ovalBg = view_oval.background as GradientDrawable
-        ovalBg?.setColor(purple)
+//        ovalBg = view_oval.background as GradientDrawable
+//        ovalBg?.setColor(purple)
     }
 
     private fun setActionBtn(){
-        mainActivity?.changeActionBtnClick {
-            isInfoVisible = true
-        }
-        mainActivity?.changeActionBtn(R.drawable.ic_info)
+//        mainActivity?.changeActionBtnClick {
+//            isInfoVisible = true
+//        }
+//        mainActivity?.changeActionBtn(R.drawable.ic_info)
     }
 
     private fun playOpenAnimations(){
@@ -144,8 +143,8 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         delayFunc(500) {
             AnimationUtils.show(btn_my_location, AnimType.RIGHT)
             AnimationUtils.show(btn_open_list, AnimType.RIGHT)
-            AnimationUtils.show(cs_oval, AnimType.BOTTOM)
-            AnimationUtils.show(rec_map_sales, AnimType.BOTTOM)
+//            AnimationUtils.show(cs_oval, AnimType.BOTTOM)
+//            AnimationUtils.show(rec_map_recents, AnimType.BOTTOM)
         }
     }
 
@@ -180,6 +179,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         mapFragment.getMapAsync(this)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -199,6 +199,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
             }
         }
 
+        setMarkers(viewModel.restaurantList.value)
         // Add a marker in Sydney and move the camera\
     }
 
@@ -207,6 +208,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLastLocation(isUserRequest: Boolean = false, onFailure: () -> (Unit) = {}){
         if (activity == null || !locationUtils.isPermissionGranted(activity)) return
 
@@ -234,7 +236,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
     // Clearing all markers and adding new
     private fun setMarkers(restaurants: MutableList<RestaurantObj>?){
         logger.log("$this setMarkers", LogType.FuncCall)
-        if (restaurants == null) return
+        if (restaurants == null || mMap == null) return
 
         mMap?.clear()
 
@@ -249,7 +251,7 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
 
             val marker = mMap?.addMarker(options)!!
             marker.tag = count++
-            marker.showInfoWindow()
+//            marker.showInfoWindow()
 
             markers.add(marker)
         }
@@ -274,33 +276,33 @@ class MapFragment : BaseFragment(R.layout.fragment_map),
         }
     }
 
-    private fun setSales(list: MutableList<RestaurantObj>?){
-        logger.log("$this setFoodTypes", LogType.FuncCall)
-        if (list == null) return
-
-        val adapterSales = AdapterSales{
-            rec_map_sales.smoothScrollToPosition(it)
-            viewModel.selectRestaurant(it)
-        }
-        rec_map_sales.adapter = adapterSales
-
-        rec_map_sales.setItemTransformer(
-            ScaleTransformer.Builder()
-                .setMinScale(0.8f)
-                .setPivotY(Pivot.Y.BOTTOM)
-                .build()
-        )
-        rec_map_sales.setItemTransitionTimeMillis(300)
-        rec_map_sales.setOffscreenItems(list.size * 180.px) //Reserve extra space equal to (childSize * count) on each side of the view
-        rec_map_sales.addScrollStateChangeListener(this)
-        rec_map_sales.addOnItemChangedListener(this)
-
-
-        list.forEach {
-            adapterSales.addElem(it)
-        }
-
-    }
+//    private fun setRecents(list: MutableList<RestaurantObj>?){
+//        logger.log("$this setFoodTypes", LogType.FuncCall)
+//        if (list == null) return
+//
+//        val adapterSales = AdapterSales{
+//            rec_map_recents.smoothScrollToPosition(it)
+//            viewModel.selectRestaurant(it)
+//        }
+//        rec_map_recents.adapter = adapterSales
+//
+//        rec_map_recents.setItemTransformer(
+//            ScaleTransformer.Builder()
+//                .setMinScale(0.8f)
+//                .setPivotY(Pivot.Y.BOTTOM)
+//                .build()
+//        )
+//        rec_map_recents.setItemTransitionTimeMillis(300)
+//        rec_map_recents.setOffscreenItems(list.size * 180.px) //Reserve extra space equal to (childSize * count) on each side of the view
+//        rec_map_recents.addScrollStateChangeListener(this)
+//        rec_map_recents.addOnItemChangedListener(this)
+//
+//
+//        list.forEach {
+//            adapterSales.addElem(it)
+//        }
+//
+//    }
 
     private fun zoomBetweenMarkers(){
         val markers = viewModel.markerList

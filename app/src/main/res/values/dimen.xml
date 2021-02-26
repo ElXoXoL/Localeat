@@ -4,7 +4,7 @@
     <dimen name="borderSizeFat">2dp</dimen>
     <dimen name="cornerRadiusLow">15dp</dimen>
     <dimen name="cornerRadiusHigh">30dp</dimen>
-    <dimen name="cornersSale">40dp</dimen>
+    <dimen name="cornersSale">30dp</dimen>
     <dimen name="marginSide">15dp</dimen>
     <dimen name="marginVertical">10dp</dimen>
     <dimen name="marginVerticalLong">20dp</dimen>

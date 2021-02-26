@@ -62,56 +62,56 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <com.yarolegovich.discretescrollview.DiscreteScrollView
-            android:id="@+id/rec_map_sales"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:visibility="invisible"
-            app:dsv_orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+<!--        <com.yarolegovich.discretescrollview.DiscreteScrollView-->
+<!--            android:id="@+id/rec_map_recents"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="50dp"-->
+<!--            android:clipToPadding="false"-->
+<!--            android:overScrollMode="never"-->
+<!--            android:scrollbars="none"-->
+<!--            android:visibility="invisible"-->
+<!--            app:dsv_orientation="horizontal"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cs_oval"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/cs_oval"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="invisible"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            >-->
 
-            <View
-                android:id="@+id/view_oval"
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:background="@drawable/oval"
-                android:translationY="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+<!--            <View-->
+<!--                android:id="@+id/view_oval"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:background="@drawable/oval"-->
+<!--                android:translationY="50dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                />-->
 
-            <com.bite.bite.views.BoldTextView
-                android:id="@+id/tv_map_recommendations"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:text="@string/text_recommendation"
-                android:textColor="@color/white"
-                android:alpha="0.8"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@id/view_oval"
-                app:layout_constraintEnd_toEndOf="@id/view_oval"
-                />
+<!--            <com.bite.bite.views.BoldTextView-->
+<!--                android:id="@+id/tv_map_recommendations"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/text_recent"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:alpha="0.8"-->
+<!--                android:textSize="18sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@id/view_oval"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/view_oval"-->
+<!--                />-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

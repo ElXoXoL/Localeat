@@ -1,20 +1,13 @@
 package com.bite.bite.ui
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import androidx.cardview.widget.CardView
 import androidx.lifecycle.MutableLiveData
 import com.bite.bite.api.NetworkRepository
 import com.bite.bite.application.base.BaseViewModel
 import com.bite.bite.application.runOnWorker
 import com.bite.bite.models.*
-import com.bite.bite.ui.list.AdapterRestaurants
 import com.bite.bite.utils.LogType
 import com.bite.bite.utils.Logger
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val networkRepository: NetworkRepository,
@@ -26,7 +19,7 @@ class MainViewModel(
     val restaurantList = MutableLiveData<MutableList<RestaurantObj>?>()
     val markerList = mutableListOf<Marker>()
 
-    val sales = MutableLiveData<MutableList<RestaurantObj>?>()
+    val recents = MutableLiveData<MutableList<RestaurantObj>?>()
 
     val selectedRestaurant = MutableLiveData<RestaurantObj?>()
 
@@ -64,15 +57,9 @@ class MainViewModel(
             }?.map {
                 RestaurantObj(it)
             }?.toMutableList()
-            response?.add(response[0])
-            response?.add(response[0])
-            response?.add(response[0])
-            response?.add(response[0])
-            response?.add(response[0])
-            response?.add(response[0])
 
             restaurantList.postValue(response)
-            sales.postValue(response)
+            recents.postValue(response)
         }
     }
 

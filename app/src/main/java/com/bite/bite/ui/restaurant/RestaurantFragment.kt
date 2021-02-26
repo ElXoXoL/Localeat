@@ -51,10 +51,10 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
     }
 
     private fun setActionBtn(){
-        mainActivity?.changeActionBtn(R.drawable.ic_phone)
-        mainActivity?.changeActionBtnClick {
-            DialogContacts(mainActivity!!, viewModel.contacts.value!!)
-        }
+//        mainActivity?.changeActionBtn(R.drawable.ic_phone)
+//        mainActivity?.changeActionBtnClick {
+//            DialogContacts(mainActivity!!, viewModel.contacts.value!!)
+//        }
     }
 
     private fun playOpenAnimations(){

@@ -13,10 +13,8 @@
         android:id="@+id/card_rest_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/marginSide"
         android:transitionName="view"
         app:cardBackgroundColor="@color/yellow"
-        app:cardCornerRadius="@dimen/cornerRadiusHigh"
         android:clipChildren="true"
         >
 
@@ -24,18 +22,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-                <com.joooonho.SelectableRoundedImageView
-                    android:id="@+id/img_rest_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:scaleType="centerCrop"
-                    android:transitionName="img"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:sriv_left_top_corner_radius="@dimen/cornerRadiusHigh"
-                    app:sriv_right_top_corner_radius="@dimen/cornerRadiusHigh"
-                    app:sriv_left_bottom_corner_radius="@dimen/cornerRadiusHigh"
-                    app:sriv_right_bottom_corner_radius="@dimen/cornerRadiusHigh"
-                    />
+
+        <com.joooonho.SelectableRoundedImageView
+            android:id="@+id/img_rest_photo"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:transitionName="img"
+            app:layout_constraintTop_toTopOf="parent"
+            app:sriv_left_bottom_corner_radius="@dimen/cornerRadiusHigh"
+            app:sriv_right_bottom_corner_radius="@dimen/cornerRadiusHigh"
+            />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
