@@ -47,7 +47,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        img_toolbar_logo.load(R.drawable.ic_logotipok)
+//        img_toolbar_logo.load(R.drawable.ic_logotipok)
         btn_toolbar_back.load(R.drawable.ic_arrow_back)
 
         btn_toolbar_back.setOnClickListener {

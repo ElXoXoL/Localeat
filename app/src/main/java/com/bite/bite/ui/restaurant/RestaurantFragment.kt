@@ -3,6 +3,8 @@ package com.bite.bite.ui.restaurant
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +88,11 @@ class RestaurantFragment: BaseFragment(R.layout.fragment_restaurant){
 //                img_rest_photo.load(item.bitmap)
 //            }
 //        }
+
+        btn_open_map.setOnClickListener {
+            val geo = "geo:${item.restaurant.lat},${item.restaurant.lng}?q=${item.restaurant.address_name}"
+            requireActivity().startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(geo)))
+        }
 
         img_rest_photo.load(item.restaurant.img)
 
